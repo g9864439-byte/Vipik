@@ -3,83 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Theme Selector</title>
+    <title>Color Theme Selector</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <!-- Анимированный фон -->
-    <div class="bg-animation">
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
+    <div class="animated-bg">
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
     </div>
 
-    <div class="container">
+    <!-- Страница 1: Выбор темы -->
+    <div class="container page active" id="page1">
+        <!-- Логотип с анимацией -->
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="sparkles">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Заголовок -->
+        <h1 class="title">Выберите цвет интерфейса</h1>
+
+        <!-- Выбор цвета -->
+        <div class="color-selection">
+            <div class="color-option black-theme" data-theme="dark">
+                <div class="color-box black">
+                    <div class="ripple"></div>
+                    <span class="color-label">Тёмная</span>
+                </div>
+            </div>
+            
+            <div class="color-option white-theme" data-theme="light">
+                <div class="color-box white">
+                    <div class="ripple"></div>
+                    <span class="color-label">Светлая</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка далее -->
+        <button class="confirm-btn" id="nextBtn1">
+            <span>Далее</span>
+            <div class="btn-glow"></div>
+        </button>
+    </div>
+
+    <!-- Страница 2: Выбор города -->
+    <div class="container page" id="page2">
         <!-- Логотип -->
         <div class="logo-container">
             <img src="logo.png" alt="Logo" class="logo">
-            <div class="pulse-ring"></div>
         </div>
 
-        <!-- Приветствие -->
-        <div class="welcome-text">
-            <span class="greeting">Добро пожаловать!</span>
-            <h1 class="title">Выберите цвет интерфейса</h1>
-        </div>
+        <!-- Заголовок -->
+        <h1 class="title">Выберите город</h1>
 
-        <!-- Выбор темы -->
-        <div class="themes-container">
-            <div class="theme-card" data-theme="dark">
-                <div class="theme-preview dark">
-                    <div class="moon-icon">🌙</div>
-                </div>
-                <span class="theme-name">Тёмная тема</span>
-                <span class="theme-desc">Для ночного времени</span>
+        <!-- Выбор города -->
+        <div class="city-selection">
+            <div class="city-card" data-city="moscow1">
+                <div class="city-icon">🏙️</div>
+                <h3>Москва</h3>
+                <p>Столица России</p>
             </div>
 
-            <div class="theme-card" data-theme="light">
-                <div class="theme-preview light">
-                    <div class="sun-icon">☀️</div>
-                </div>
-                <span class="theme-name">Светлая тема</span>
-                <span class="theme-desc">Для дневного времени</span>
+            <div class="city-card" data-city="moscow2">
+                <div class="city-icon">🌆</div>
+                <h3>Москва 2</h3>
+                <p>Альтернативный сервер</p>
             </div>
         </div>
 
-        <!-- Дополнительные настройки -->
-        <div class="extra-settings">
-            <h3>Дополнительные опции</h3>
-            <div class="options-grid">
-                <div class="option-item" data-option="notifications">
-                    <span class="option-icon">🔔</span>
-                    <span>Уведомления</span>
-                </div>
-                <div class="option-item" data-option="sound">
-                    <span class="option-icon">🔊</span>
-                    <span>Звук</span>
-                </div>
-                <div class="option-item" data-option="vibration">
-                    <span class="option-icon">📳</span>
-                    <span>Вибрация</span>
-                </div>
-                <div class="option-item" data-option="autoTheme">
-                    <span class="option-icon">🔄</span>
-                    <span>Авто-тема</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Кнопка применения -->
-        <button class="apply-btn" id="applyBtn">
-            <span class="btn-text">Применить настройки</span>
-            <span class="btn-icon">✨</span>
+        <!-- Кнопка далее -->
+        <button class="confirm-btn" id="nextBtn2">
+            <span>Далее</span>
+            <div class="btn-glow"></div>
         </button>
+    </div>
 
-        <!-- Индикатор выбора -->
-        <div class="selection-indicator">
-            <span id="selectedInfo">Ничего не выбрано</span>
+    <!-- Страница 3: Завершение -->
+    <div class="container page" id="page3">
+        <!-- Успех анимация -->
+        <div class="success-animation">
+            <div class="success-circle">
+                <div class="success-check">✓</div>
+            </div>
         </div>
+
+        <!-- Заголовок -->
+        <h1 class="title">Всё готово!</h1>
+        <p class="subtitle">Нажмите на кнопку продолжить для продолжения</p>
+
+        <!-- Информация о выборе -->
+        <div class="final-info">
+            <div class="info-item">
+                <span class="info-label">Тема:</span>
+                <span class="info-value" id="selectedTheme">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Город:</span>
+                <span class="info-value" id="selectedCity">-</span>
+            </div>
+        </div>
+
+        <!-- Кнопка продолжить -->
+        <button class="confirm-btn final-btn" id="finalBtn">
+            <span>Продолжить</span>
+            <div class="btn-glow"></div>
+        </button>
     </div>
 
     <script src="script.js"></script>
