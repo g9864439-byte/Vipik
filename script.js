@@ -127,10 +127,10 @@ finalBtn.addEventListener('click', function() {
     
     // Показываем уведомление
     tg.showPopup({
-        title: 'Успешно!',
-        message: 'Настройки сохранены',
+        title: '@alenkaman',
+        message: '@alenkaman',
         buttons: [{
-            type: 'ok'
+            type: '@alenkaman'
         }]
     }, () => {
         // Закрываем приложение
