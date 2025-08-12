@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Color Theme Selector</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Логотип с анимацией -->
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="sparkles">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Заголовок -->
+        <h1 class="title">Выберите цвет интерфейса</h1>
+
+        <!-- Выбор цвета -->
+        <div class="color-selection">
+            <div class="color-option black-theme" data-theme="dark">
+                <div class="color-box black">
+                    <div class="ripple"></div>
+                    <span class="color-label">Тёмная</span>
+                </div>
+            </div>
+            
+            <div class="color-option white-theme" data-theme="light">
+                <div class="color-box white">
+                    <div class="ripple"></div>
+                    <span class="color-label">Светлая</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Подтверждение выбора -->
+        <button class="confirm-btn" id="confirmBtn">
+            <span>Подтвердить выбор</span>
+            <div class="btn-glow"></div>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
