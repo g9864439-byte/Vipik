@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Vape Shop Mini App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="catalog.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <!-- Анимированный фон -->
+    <div class="animated-bg">
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+    </div>
+
+    <!-- Страница 1: Выбор темы -->
+    <div class="container page active" id="page1">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="sparkles">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <h1 class="title">Выберите цвет интерфейса</h1>
+
+        <div class="color-selection">
+            <div class="color-option black-theme" data-theme="dark">
+                <div class="color-box black">
+                    <div class="ripple"></div>
+                    <span class="color-label">Тёмная</span>
+                </div>
+            </div>
+            
+            <div class="color-option white-theme" data-theme="light">
+                <div class="color-box white">
+                    <div class="ripple"></div>
+                    <span class="color-label">Светлая</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="confirm-btn" id="nextBtn1">
+            <span>Далее</span>
+            <div class="btn-glow"></div>
+        </button>
+    </div>
+
+    <!-- Страница 2: Выбор города -->
+    <div class="container page" id="page2">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo">
+        </div>
+
+        <h1 class="title">Выберите город</h1>
+
+        <div class="city-selection">
+            <div class="city-card" data-city="moscow1">
+                <div class="city-icon">🏙️</div>
+                <h3>Москва</h3>
+                <p>Столица России</p>
+            </div>
+
+            <div class="city-card" data-city="moscow2">
+                <div class="city-icon">🌆</div>
+                <h3>Москва 2</h3>
+                <p>Альтернативный сервер</p>
+            </div>
+        </div>
+
+        <button class="confirm-btn" id="nextBtn2">
+            <span>Далее</span>
+            <div class="btn-glow"></div>
+        </button>
+    </div>
+
+    <!-- Страница 3: Завершение -->
+    <div class="container page" id="page3">
+        <div class="success-animation">
+            <div class="success-circle">
+                <div class="success-check">✓</div>
+            </div>
+        </div>
+
+        <h1 class="title">Всё готово!</h1>
+        <p class="subtitle">Нажмите на кнопку продолжить для продолжения</p>
+
+        <div class="final-info">
+            <div class="info-item">
+                <span class="info-label">Тема:</span>
+                <span class="info-value" id="selectedTheme">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Город:</span>
+                <span class="info-value" id="selectedCity">-</span>
+            </div>
+        </div>
+
+        <button class="confirm-btn final-btn" id="finalBtn">
+            <span>Продолжить</span>
+            <div class="btn-glow"></div>
+        </button>
+    </div>
+
+    <!-- Страница 4: Каталог -->
+    <div class="catalog-container page" id="page4">
+        <div class="catalog-header">
+            <h1 class="catalog-title">
+                <span class="gradient-text">VAPE</span> SHOP
+            </h1>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск товаров...">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <div class="categories-section">
+            <h2 class="section-title">Категории</h2>
+            <div class="categories-grid">
+                <div class="category-card active" data-category="liquids">
+                    <div class="category-icon">💧</div>
+                    <span>Жидкости</span>
+                </div>
+                <div class="category-card" data-category="vapes">
+                    <div class="category-icon">💨</div>
+                    <span>Парогенераторы</span>
+                </div>
+                <div class="category-card" data-category="disposable">
+                    <div class="category-icon">🔋</div>
+                    <span>Одноразовые</span>
+                </div>
+                <div class="category-card" data-category="tobacco">
+                    <div class="category-icon">🚬</div>
+                    <span>Табачные</span>
+                </div>
+                <div class="category-card" data-category="boosters">
+                    <div class="category-icon">⚡</div>
+                    <span>Никобустеры</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <h2 class="section-title">Фильтры</h2>
+            <div class="filters-container">
+                <select class="filter-select" id="sortFilter">
+                    <option value="default">По умолчанию</option>
+                    <option value="cheap">Сначала дешёвые</option>
+                    <option value="expensive">Сначала дорогие</option>
+                </select>
+                
+                <div class="price-filter">
+                    <span class="price-label">Цена:</span>
+                    <input type="number" class="price-input" id="priceMin" placeholder="От" value="0">
+                    <span>-</span>
+                    <input type="number" class="price-input" id="priceMax" placeholder="До" value="10000">
+                </div>
+                
+                <button class="apply-filter-btn" id="applyFilter">
+                    Применить
+                </button>
+            </div>
+        </div>
+
+        <div class="products-section">
+            <h2 class="section-title">Товары</h2>
+            <div class="products-grid" id="productsGrid">
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="product-modal" id="productModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            
+            <div class="modal-body">
+                <img src="" alt="" class="modal-image" id="modalImage">
+                
+                <div class="modal-info">
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-price" id="modalPrice"></div>
+                    
+                    <div class="modal-details">
+                        <h3>О товаре</h3>
+                        <div class="modal-category">
+                            <span>Категория:</span>
+                            <span id="modalCategory"></span>
+                        </div>
+                        
+                        <div class="modal-description">
+                            <h3>Описание 
+                                <button class="toggle-desc" id="toggleDesc">
+                                    <span>Развернуть</span>
+                                    <span class="arrow">▼</span>
+                                </button>
+                            </h3>
+                            <div class="description-text" id="descriptionText"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="modal-buy-btn" id="buyBtn">
+                        <span>Добавить в корзину</span>
+                        <span class="cart-icon">🛒</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
