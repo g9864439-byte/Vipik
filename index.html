@@ -16,13 +16,47 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            align-items: flex-start;
+            padding: 20px 0;
             position: relative;
+            transition: background 0.5s ease;
+        }
+
+        /* Темная тема */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-theme .container,
+        body.dark-theme .catalog-container {
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+        }
+
+        body.dark-theme .title,
+        body.dark-theme .section-title {
+            color: #fff;
+        }
+
+        body.dark-theme .city-card,
+        body.dark-theme .category-card,
+        body.dark-theme .product-card,
+        body.dark-theme .filters-section {
+            background: rgba(40, 40, 40, 0.9);
+            border-color: #444;
+            color: white;
+        }
+
+        body.dark-theme .search-input,
+        body.dark-theme .filter-select,
+        body.dark-theme .price-input {
+            background: rgba(50, 50, 50, 0.9);
+            border-color: #555;
+            color: white;
         }
 
         /* Анимированный светлый фон */
@@ -33,13 +67,38 @@
             top: 0;
             left: 0;
             z-index: -1;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow: hidden;
+        }
+
+        /* Плавающие частицы */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .bg-bubble {
             position: absolute;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             animation: floating 20s infinite ease-in-out;
         }
 
@@ -69,12 +128,18 @@
 
         @keyframes floating {
             0%, 100% {
-                transform: translateY(0) rotate(0deg);
+                transform: translateY(0) rotate(0deg) scale(1);
                 opacity: 0.7;
             }
+            25% {
+                transform: translateY(-100px) rotate(90deg) scale(1.1);
+            }
             50% {
-                transform: translateY(-200px) rotate(180deg);
+                transform: translateY(-200px) rotate(180deg) scale(1);
                 opacity: 0.9;
+            }
+            75% {
+                transform: translateY(-100px) rotate(270deg) scale(0.9);
             }
         }
 
@@ -87,9 +152,11 @@
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 90%;
-            position: absolute;
+            margin: 0 auto;
+            position: relative;
             z-index: 1;
             display: none;
+            transition: all 0.5s ease;
         }
 
         .container.page.active {
@@ -100,11 +167,11 @@
         @keyframes pageSlideIn {
             from {
                 opacity: 0;
-                transform: translateX(100px) scale(0.9);
+                transform: translateY(50px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateX(0) scale(1);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -119,11 +186,14 @@
 
         @keyframes dropDown {
             0% {
-                transform: translateY(-200px) scale(0.5);
+                transform: translateY(-200px) scale(0.5) rotate(-180deg);
                 opacity: 0;
             }
+            50% {
+                transform: translateY(20px) scale(1.1) rotate(10deg);
+            }
             100% {
-                transform: translateY(0) scale(1);
+                transform: translateY(0) scale(1) rotate(0);
                 opacity: 1;
             }
         }
@@ -134,6 +204,11 @@
             object-fit: cover;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(5deg);
         }
 
         /* Искры */
@@ -141,9 +216,10 @@
             position: absolute;
             width: 4px;
             height: 4px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
             border-radius: 50%;
             animation: sparkle 2s infinite;
+            box-shadow: 0 0 10px #ffd700;
         }
 
         .sparkles span:nth-child(1) {
@@ -166,11 +242,11 @@
         @keyframes sparkle {
             0%, 100% {
                 opacity: 0;
-                transform: scale(0);
+                transform: scale(0) rotate(0deg);
             }
             50% {
                 opacity: 1;
-                transform: scale(1) rotate(180deg);
+                transform: scale(1.5) rotate(180deg);
             }
         }
 
@@ -184,6 +260,16 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
         }
 
         .subtitle {
@@ -211,6 +297,25 @@
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
+            overflow: hidden;
+        }
+
+        .color-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .color-box:hover::before {
+            width: 150px;
+            height: 150px;
         }
 
         .color-box:hover {
@@ -231,6 +336,16 @@
         .color-box.selected {
             transform: scale(1.15);
             box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            animation: selectedPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes selectedPulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(102, 126, 234, 0.8);
+            }
         }
 
         .color-label {
@@ -263,6 +378,23 @@
             display: flex;
             align-items: center;
             gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .city-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .city-card:hover::after {
+            left: 100%;
         }
 
         .city-card:hover {
@@ -284,6 +416,16 @@
 
         .city-icon {
             font-size: 40px;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
         .city-card h3 {
@@ -313,17 +455,39 @@
             align-items: center;
             justify-content: center;
             animation: successPop 0.6s ease-out;
+            position: relative;
+        }
+
+        .success-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #4ade80;
+            animation: successRing 1s ease-out 0.5s;
+        }
+
+        @keyframes successRing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
 
         @keyframes successPop {
             0% {
-                transform: scale(0);
+                transform: scale(0) rotate(-180deg);
             }
             50% {
-                transform: scale(1.2);
+                transform: scale(1.2) rotate(10deg);
             }
             100% {
-                transform: scale(1);
+                transform: scale(1) rotate(0);
             }
         }
 
@@ -331,6 +495,16 @@
             color: white;
             font-size: 60px;
             font-weight: bold;
+            animation: checkAppear 0.5s ease-out 0.3s both;
+        }
+
+        @keyframes checkAppear {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
         }
 
         .final-info {
@@ -383,6 +557,34 @@
         .final-btn {
             opacity: 1;
             pointer-events: auto;
+            animation: btnPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes btnPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .confirm-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .confirm-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .confirm-btn:hover {
@@ -402,10 +604,27 @@
             padding: 30px;
             max-width: 900px;
             width: 95%;
-            margin: 20px auto;
+            margin: 0 auto;
             display: none;
             position: relative;
             z-index: 1;
+            max-height: 90vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .catalog-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .catalog-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .catalog-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
         }
 
         .catalog-container.active {
@@ -416,12 +635,23 @@
         .catalog-header {
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
         }
 
         .catalog-title {
             font-size: 36px;
             font-weight: 900;
             margin-bottom: 20px;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
         .gradient-text {
@@ -442,11 +672,14 @@
             border: 2px solid #e0e0e0;
             border-radius: 50px;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
 
         .search-input:focus {
             outline: none;
             border-color: #667eea;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
         }
 
         .search-icon {
@@ -455,6 +688,16 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 20px;
+            animation: searchPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes searchPulse {
+            0%, 100% {
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                transform: translateY(-50%) scale(1.2);
+            }
         }
 
         .section-title {
@@ -462,6 +705,20 @@
             color: #333;
             margin-bottom: 15px;
             font-weight: 600;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
 
         .categories-grid {
@@ -479,10 +736,27 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
         }
 
         .category-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.05);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
@@ -490,11 +764,29 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             border-color: transparent;
             color: white;
+            animation: categoryActive 0.5s ease;
+        }
+
+        @keyframes categoryActive {
+            0% {
+                transform: scale(0.9);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .category-icon {
             font-size: 24px;
             margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover .category-icon {
+            transform: rotate(20deg) scale(1.2);
         }
 
         .category-card span {
@@ -503,11 +795,35 @@
             font-weight: 600;
         }
 
+        /* Улучшенные фильтры */
         .filters-section {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filters-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+            animation: filterShine 3s linear infinite;
+        }
+
+        @keyframes filterShine {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .filters-container {
@@ -517,26 +833,75 @@
             align-items: center;
         }
 
-        .filter-select,
-        .price-input {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: #666;
             font-size: 14px;
         }
 
+        .filter-select,
         .price-input {
-            width: 80px;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .filter-select:focus,
+        .price-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .price-input {
+            width: 100px;
         }
 
         .apply-filter-btn {
-            padding: 10px 20px;
+            padding: 12px 30px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .apply-filter-btn::after {
+            content: '✨';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .apply-filter-btn:hover::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .apply-filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
         .products-grid {
@@ -552,17 +917,51 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             cursor: pointer;
+            animation: productFadeIn 0.5s ease-out;
+            position: relative;
+        }
+
+        @keyframes productFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card::before {
+            content: '🔥';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            z-index: 10;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+            transform: scale(1.2);
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
         .product-image {
             width: 100%;
             height: 180px;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
         }
 
         .product-info {
@@ -585,7 +984,9 @@
         .product-price {
             font-size: 20px;
             font-weight: 700;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .product-details-btn {
@@ -598,6 +999,27 @@
             font-weight: 600;
             margin-top: 10px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-details-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .product-details-btn:hover::before {
+            width: 200px;
+            height: 200px;
         }
 
         /* Модальное окно */
@@ -610,6 +1032,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
@@ -620,6 +1043,18 @@
             max-height: 90vh;
             margin: 5vh auto;
             overflow-y: auto;
+            animation: modalSlideIn 0.5s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-100px) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
         }
 
         .modal-close {
@@ -630,6 +1065,12 @@
             color: #999;
             cursor: pointer;
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #333;
+            transform: rotate(90deg);
         }
 
         .modal-body {
@@ -656,7 +1097,9 @@
         .modal-price {
             font-size: 28px;
             font-weight: 900;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
         }
 
@@ -696,6 +1139,27 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-buy-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .modal-buy-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         @media (max-width: 768px) {
@@ -704,6 +1168,9 @@
             }
             .categories-grid {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            .filter-group {
+                width: 100%;
             }
         }
 
@@ -716,7 +1183,7 @@
 </head>
 <body>
     <!-- Анимированный фон -->
-    <div class="animated-bg">
+    <div class="animated-bg" id="animatedBg">
         <div class="bg-bubble"></div>
         <div class="bg-bubble"></div>
         <div class="bg-bubble"></div>
@@ -725,7 +1192,7 @@
     <!-- Страница 1: Выбор темы -->
     <div class="container page active" id="page1">
         <div class="logo-container">
-            <img src="https://via.placeholder.com/150x150/667eea/ffffff?text=LOGO" alt="Logo" class="logo">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSIwIiB5MT0iMCIgeDI9IjE1MCIgeTI9IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
             <div class="sparkles">
                 <span></span>
                 <span></span>
@@ -757,7 +1224,7 @@
     <!-- Страница 2: Выбор города -->
     <div class="container page" id="page2">
         <div class="logo-container">
-            <img src="https://via.placeholder.com/150x150/667eea/ffffff?text=LOGO" alt="Logo" class="logo">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjAiIHkxPSIwIiB4Mj0iMTUwIiB5Mj0iMTUwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2NjdFRUEiIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
         </div>
 
         <h1 class="title">Выберите город</h1>
@@ -828,7 +1295,11 @@
         <div class="categories-section">
             <h2 class="section-title">Категории</h2>
             <div class="categories-grid">
-                <div class="category-card active" data-category="liquids">
+                <div class="category-card active" data-category="all">
+                    <div class="category-icon">🎯</div>
+                    <span>Все</span>
+                </div>
+                <div class="category-card" data-category="liquids">
                     <div class="category-icon">💧</div>
                     <span>Жидкости</span>
                 </div>
@@ -854,16 +1325,19 @@
         <div class="filters-section">
             <h2 class="section-title">Фильтры</h2>
             <div class="filters-container">
-                <select class="filter-select" id="sortFilter">
-                    <option value="default">По умолчанию</option>
-                    <option value="cheap">Сначала дешёвые</option>
-                    <option value="expensive">Сначала дорогие</option>
-                </select>
+                <div class="filter-group">
+                    <label class="filter-label">Сортировка:</label>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="default">По умолчанию</option>
+                        <option value="cheap">Сначала дешёвые</option>
+                        <option value="expensive">Сначала дорогие</option>
+                    </select>
+                </div>
                 
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span>Цена:</span>
+                <div class="filter-group">
+                    <label class="filter-label">Цена:</label>
                     <input type="number" class="price-input" id="priceMin" placeholder="От" value="0">
-                    <span>-</span>
+                    <span>—</span>
                     <input type="number" class="price-input" id="priceMax" placeholder="До" value="10000">
                 </div>
                 
@@ -951,33 +1425,60 @@
                     category: "Жидкости",
                     categoryId: "liquids",
                     description: "Освежающая мятная жидкость. Крепость: 6мг, Объем: 30мл"
+                },
+                {
+                    id: 3,
+                    name: "Berry Blast",
+                    price: 420,
+                    image: "https://via.placeholder.com/300x300/ec4899/ffffff?text=Berry+Blast",
+                    category: "Жидкости",
+                    categoryId: "liquids",
+                    description: "Ягодный взрыв вкуса. Крепость: 3мг, Объем: 30мл"
                 }
             ],
             vapes: [
                 {
-                    id: 3,
+                    id: 4,
                     name: "VaporMax Pro",
                     price: 3500,
-                    image: "https://via.placeholder.com/300x300/ec4899/ffffff?text=VaporMax",
+                    image: "https://via.placeholder.com/300x300/8b5cf6/ffffff?text=VaporMax",
                     category: "Парогенераторы",
                     categoryId: "vapes",
                     description: "Профессиональный парогенератор 200W"
+                },
+                {
+                    id: 5,
+                    name: "Cloud Beast",
+                    price: 2800,
+                    image: "https://via.placeholder.com/300x300/f59e0b/ffffff?text=Cloud+Beast",
+                    category: "Парогенераторы",
+                    categoryId: "vapes",
+                    description: "Мощный девайс для больших облаков"
                 }
             ],
             disposable: [
                 {
-                    id: 4,
+                    id: 6,
                     name: "ElfBar 5000",
                     price: 890,
                     image: "https://via.placeholder.com/300x300/06b6d4/ffffff?text=ElfBar",
                     category: "Одноразовые",
                     categoryId: "disposable",
                     description: "5000 затяжек, вкус: Арбуз-Лёд"
+                },
+                {
+                    id: 7,
+                    name: "HQD King",
+                    price: 750,
+                    image: "https://via.placeholder.com/300x300/14b8a6/ffffff?text=HQD",
+                    category: "Одноразовые",
+                    categoryId: "disposable",
+                    description: "2000 затяжек, премиум качество"
                 }
             ],
             tobacco: [
                 {
-                    id: 5,
+                    id: 8,
                     name: "Parliament",
                     price: 180,
                     image: "https://via.placeholder.com/300x300/64748b/ffffff?text=Parliament",
@@ -988,7 +1489,7 @@
             ],
             boosters: [
                 {
-                    id: 6,
+                    id: 9,
                     name: "NicBoost 20mg",
                     price: 120,
                     image: "https://via.placeholder.com/300x300/dc2626/ffffff?text=NicBoost",
@@ -999,15 +1500,40 @@
             ]
         };
 
-        let currentCategory = 'liquids';
+        let currentCategory = 'all';
         let allProducts = [];
 
-        // Страница 1
+        // Создаем плавающие частицы
+        function createParticles() {
+            const bg = document.getElementById('animatedBg');
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animation = `float-up ${particle.style.animationDuration} linear infinite`;
+                bg.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Страница 1 - Выбор темы
         document.querySelectorAll('.color-box').forEach(box => {
             box.addEventListener('click', function() {
                 document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
                 appData.theme = this.parentElement.dataset.theme;
+                
+                // Сразу меняем тему
+                if (appData.theme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+                
                 document.getElementById('nextBtn1').classList.add('active');
             });
         });
@@ -1018,7 +1544,7 @@
             document.getElementById('page2').classList.add('active');
         });
 
-        // Страница 2
+        // Страница 2 - Выбор города
         document.querySelectorAll('.city-card').forEach(card => {
             card.addEventListener('click', function() {
                 document.querySelectorAll('.city-card').forEach(c => c.classList.remove('selected'));
@@ -1036,7 +1562,7 @@
             document.getElementById('selectedCity').textContent = appData.city === 'moscow1' ? 'Москва' : 'Москва 2';
         });
 
-        // Страница 3
+        // Страница 3 - Финал
         document.getElementById('finalBtn').addEventListener('click', function() {
             document.getElementById('page3').classList.remove('active');
             document.getElementById('page4').classList.add('active');
@@ -1046,7 +1572,7 @@
         // Каталог
         function initializeCatalog() {
             allProducts = Object.values(products).flat();
-            displayProducts(products.liquids);
+            displayProducts(allProducts); // Показываем все товары по умолчанию
             
             // Категории
             document.querySelectorAll('.category-card').forEach(card => {
@@ -1054,7 +1580,12 @@
                     document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
                     this.classList.add('active');
                     currentCategory = this.dataset.category;
-                    displayProducts(products[currentCategory] || []);
+                    
+                    if (currentCategory === 'all') {
+                        displayProducts(allProducts);
+                    } else {
+                        displayProducts(products[currentCategory] || []);
+                    }
                 });
             });
 
@@ -1062,7 +1593,9 @@
             document.getElementById('searchInput').addEventListener('input', function() {
                 const query = this.value.toLowerCase();
                 const filtered = query ? allProducts.filter(p => 
-                    p.name.toLowerCase().includes(query)) : products[currentCategory];
+                    p.name.toLowerCase().includes(query) || 
+                    p.category.toLowerCase().includes(query)) : 
+                    (currentCategory === 'all' ? allProducts : products[currentCategory]);
                 displayProducts(filtered);
             });
 
@@ -1072,8 +1605,8 @@
                 const minPrice = parseInt(document.getElementById('priceMin').value) || 0;
                 const maxPrice = parseInt(document.getElementById('priceMax').value) || 999999;
                 
-                let filtered = products[currentCategory].filter(p => 
-                    p.price >= minPrice && p.price <= maxPrice);
+                let filtered = (currentCategory === 'all' ? allProducts : products[currentCategory] || [])
+                    .filter(p => p.price >= minPrice && p.price <= maxPrice);
                 
                 if (sortType === 'cheap') {
                     filtered.sort((a, b) => a.price - b.price);
@@ -1089,9 +1622,10 @@
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = '';
             
-            productsList.forEach(product => {
+            productsList.forEach((product, index) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
+                card.style.animationDelay = `${index * 0.1}s`;
                 card.innerHTML = `
                     <img src="${product.image}" alt="${product.name}" class="product-image">
                     <div class="product-info">
@@ -1139,12 +1673,12 @@
         document.getElementById('buyBtn').addEventListener('click', function() {
             if (tg) {
                 tg.showPopup({
-                    title: 'Товар добавлен!',
+                    title: '✅ Товар добавлен!',
                     message: 'Товар успешно добавлен в корзину',
                     buttons: [{type: 'ok'}]
                 });
             } else {
-                alert('Товар добавлен в корзину!');
+                alert('✅ Товар добавлен в корзину!');
             }
             document.getElementById('productModal').style.display = 'none';
         });
