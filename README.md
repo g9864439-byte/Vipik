@@ -1,2 +1,0 @@
-# Vipik
-Vipik
