@@ -21,7 +21,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 80px 0 20px 0;
+            padding: 20px 0;
             position: relative;
             transition: background 0.5s ease;
         }
@@ -33,7 +33,7 @@
 
         body.dark-theme .container,
         body.dark-theme .catalog-container,
-        body.dark-theme .top-nav {
+        body.dark-theme .floating-nav {
             background: rgba(30, 30, 30, 0.95);
             color: white;
         }
@@ -46,7 +46,7 @@
         body.dark-theme .city-card,
         body.dark-theme .category-card,
         body.dark-theme .product-card,
-        body.dark-theme .sort-section,
+        body.dark-theme .sort-container,
         body.dark-theme .cart-item,
         body.dark-theme .profile-card,
         body.dark-theme .favorites-item {
@@ -146,106 +146,129 @@
             }
         }
 
-        /* Верхняя навигация */
-        .top-nav {
+        /* Плавающая навигация */
+        .floating-nav {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 8px;
+            border-radius: 30px;
+            padding: 15px 25px;
             display: flex;
-            gap: 5px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             z-index: 100;
-            animation: navSlideDown 0.5s ease-out;
+            animation: navFloat 3s ease-in-out infinite;
         }
 
-        @keyframes navSlideDown {
-            from {
-                top: -100px;
-                opacity: 0;
+        @keyframes navFloat {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
             }
-            to {
-                top: 20px;
-                opacity: 1;
+            50% {
+                transform: translateX(-50%) translateY(-5px);
             }
         }
 
-        .nav-btn {
+        .nav-item {
             position: relative;
-            width: 50px;
-            height: 50px;
-            border-radius: 15px;
-            background: transparent;
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             gap: 2px;
+            overflow: hidden;
         }
 
-        .nav-btn:hover {
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .nav-btn.active {
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
         }
 
-        .nav-btn.active .nav-icon {
+        .nav-item:hover::before {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-icon,
+        .nav-item.active .nav-text {
             color: white;
         }
 
         .nav-icon {
-            font-size: 22px;
+            font-size: 24px;
+            position: relative;
+            z-index: 1;
             transition: transform 0.3s ease;
         }
 
-        .nav-btn:hover .nav-icon {
-            transform: scale(1.2);
+        .nav-item:hover .nav-icon {
+            transform: rotate(20deg) scale(1.2);
+            color: white;
         }
 
-        .nav-label {
-            font-size: 9px;
+        .nav-text {
+            font-size: 10px;
             font-weight: 600;
             color: #666;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
         }
 
-        .nav-btn.active .nav-label {
+        .nav-item:hover .nav-text {
             color: white;
         }
 
         .nav-badge {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: -5px;
+            right: -5px;
             background: linear-gradient(135deg, #f87171, #ef4444);
             color: white;
             font-size: 10px;
             font-weight: bold;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 10px;
-            min-width: 16px;
+            min-width: 18px;
             text-align: center;
-            animation: badgePop 0.3s ease-out;
+            animation: badgeBounce 2s ease-in-out infinite;
         }
 
-        @keyframes badgePop {
-            0% {
-                transform: scale(0);
+        @keyframes badgeBounce {
+            0%, 100% {
+                transform: scale(1);
             }
             50% {
                 transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
             }
         }
 
@@ -281,22 +304,24 @@
             }
         }
 
-        /* Логотип */
+        /* Логотип с супер эффектами */
         .logo-container {
             position: relative;
             width: 150px;
             height: 150px;
             margin: 0 auto 30px;
-            animation: dropDown 0.8s ease-out;
+            animation: logoMagic 0.8s ease-out;
         }
 
-        @keyframes dropDown {
+        @keyframes logoMagic {
             0% {
-                transform: translateY(-200px) scale(0.5) rotate(-180deg);
+                transform: translateY(-200px) scale(0) rotate(-720deg);
                 opacity: 0;
+                filter: blur(10px);
             }
             50% {
-                transform: translateY(20px) scale(1.1) rotate(10deg);
+                transform: translateY(20px) scale(1.2) rotate(-360deg);
+                filter: blur(0);
             }
             100% {
                 transform: translateY(0) scale(1) rotate(0);
@@ -310,71 +335,84 @@
             object-fit: cover;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .logo:hover {
-            transform: scale(1.05) rotate(5deg);
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
         }
 
-        /* Искры */
+        /* Супер искры */
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
         .sparkles span {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 6px;
+            height: 6px;
             background: linear-gradient(135deg, #ffd700, #ffed4e);
             border-radius: 50%;
-            animation: sparkle 2s infinite;
-            box-shadow: 0 0 10px #ffd700;
+            animation: superSparkle 2s infinite;
+            box-shadow: 0 0 20px #ffd700;
         }
 
         .sparkles span:nth-child(1) {
-            top: 20%;
-            left: 20%;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
         }
 
         .sparkles span:nth-child(2) {
             top: 80%;
-            right: 20%;
+            right: 10%;
             animation-delay: 0.6s;
         }
 
         .sparkles span:nth-child(3) {
-            bottom: 20%;
-            left: 30%;
+            bottom: 10%;
+            left: 50%;
             animation-delay: 1.2s;
         }
 
-        @keyframes sparkle {
+        @keyframes superSparkle {
             0%, 100% {
                 opacity: 0;
-                transform: scale(0) rotate(0deg);
+                transform: scale(0) rotate(0deg) translate(0, 0);
             }
             50% {
                 opacity: 1;
-                transform: scale(1.5) rotate(180deg);
+                transform: scale(2) rotate(180deg) translate(20px, -20px);
             }
         }
 
-        /* Заголовки */
+        /* Заголовки с эффектами */
         .title {
             text-align: center;
             font-size: 24px;
             color: #333;
             margin-bottom: 30px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: titlePulse 2s ease-in-out infinite;
+            animation: gradientShift 3s ease-in-out infinite;
         }
 
-        @keyframes titlePulse {
+        @keyframes gradientShift {
             0%, 100% {
-                transform: scale(1);
+                background-position: 0% 50%;
             }
             50% {
-                transform: scale(1.02);
+                background-position: 100% 50%;
             }
         }
 
@@ -383,9 +421,21 @@
             font-size: 16px;
             color: #666;
             margin: -20px 0 30px 0;
+            animation: subtitleFade 1s ease-out;
         }
 
-        /* Выбор цвета */
+        @keyframes subtitleFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Выбор цвета с крутыми эффектами */
         .color-selection {
             display: flex;
             justify-content: space-around;
@@ -404,6 +454,26 @@
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
+            animation: colorBoxAppear 0.6s ease-out both;
+        }
+
+        .color-box:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .color-box:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes colorBoxAppear {
+            from {
+                opacity: 0;
+                transform: scale(0) rotate(-180deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
         }
 
         .color-box::before {
@@ -414,19 +484,36 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.5);
             transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transition: all 0.6s ease;
         }
 
         .color-box:hover::before {
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .color-box::after {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .color-box:hover::after {
+            opacity: 1;
+            top: 5px;
+            right: 5px;
+            transform: rotate(20deg);
         }
 
         .color-box:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         }
 
         .color-box.black {
@@ -440,17 +527,19 @@
         }
 
         .color-box.selected {
-            transform: scale(1.15);
-            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
-            animation: selectedPulse 1s ease-in-out infinite;
+            transform: scale(1.2) rotate(10deg);
+            box-shadow: 0 0 50px rgba(102, 126, 234, 0.8);
+            animation: selectedGlow 1s ease-in-out infinite;
         }
 
-        @keyframes selectedPulse {
+        @keyframes selectedGlow {
             0%, 100% {
                 box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+                transform: scale(1.2) rotate(10deg);
             }
             50% {
-                box-shadow: 0 0 50px rgba(102, 126, 234, 0.8);
+                box-shadow: 0 0 60px rgba(102, 126, 234, 1);
+                transform: scale(1.25) rotate(5deg);
             }
         }
 
@@ -466,7 +555,7 @@
             color: #333;
         }
 
-        /* Выбор города */
+        /* Выбор города с крутыми эффектами */
         .city-selection {
             display: flex;
             flex-direction: column;
@@ -486,26 +575,56 @@
             gap: 20px;
             position: relative;
             overflow: hidden;
+            animation: cityCardSlide 0.6s ease-out both;
         }
 
-        .city-card::after {
+        .city-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .city-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes cityCardSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-100px) rotate(-5deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) rotate(0);
+            }
+        }
+
+        .city-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
         }
 
-        .city-card:hover::after {
-            left: 100%;
+        .city-card:hover::before {
+            animation: cityShine 0.5s ease;
+        }
+
+        @keyframes cityShine {
+            0% {
+                transform: rotate(45deg) translate(-100%, -100%);
+            }
+            100% {
+                transform: rotate(45deg) translate(100%, 100%);
+            }
         }
 
         .city-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             border-color: #667eea;
         }
 
@@ -513,6 +632,20 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             border-color: transparent;
             color: white;
+            transform: scale(1.05);
+            animation: citySelected 0.5s ease;
+        }
+
+        @keyframes citySelected {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1) rotate(2deg);
+            }
+            100% {
+                transform: scale(1.05) rotate(0);
+            }
         }
 
         .city-card.selected h3,
@@ -522,15 +655,18 @@
 
         .city-icon {
             font-size: 40px;
-            animation: iconBounce 2s ease-in-out infinite;
+            animation: iconFloat 3s ease-in-out infinite;
         }
 
-        @keyframes iconBounce {
+        @keyframes iconFloat {
             0%, 100% {
-                transform: translateY(0);
+                transform: translateY(0) rotate(0deg);
             }
-            50% {
-                transform: translateY(-5px);
+            25% {
+                transform: translateY(-5px) rotate(-5deg);
+            }
+            75% {
+                transform: translateY(5px) rotate(5deg);
             }
         }
 
@@ -545,11 +681,12 @@
             color: #666;
         }
 
-        /* Успех */
+        /* Успех с супер анимацией */
         .success-animation {
             margin: 20px auto 30px;
             width: 120px;
             height: 120px;
+            position: relative;
         }
 
         .success-circle {
@@ -560,21 +697,42 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: successPop 0.6s ease-out;
+            animation: successBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative;
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.4);
         }
 
-        .success-circle::before {
+        @keyframes successBounce {
+            0% {
+                transform: scale(0) rotate(-180deg);
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+            }
+            75% {
+                transform: scale(0.9) rotate(-5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .success-circle::before,
+        .success-circle::after {
             content: '';
             position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 50%;
             border: 3px solid #4ade80;
-            animation: successRing 1s ease-out 0.5s;
+            animation: successPulse 1.5s ease-out infinite;
         }
 
-        @keyframes successRing {
+        .success-circle::after {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes successPulse {
             0% {
                 transform: scale(1);
                 opacity: 1;
@@ -585,39 +743,61 @@
             }
         }
 
-        @keyframes successPop {
-            0% {
-                transform: scale(0) rotate(-180deg);
-            }
-            50% {
-                transform: scale(1.2) rotate(10deg);
-            }
-            100% {
-                transform: scale(1) rotate(0);
-            }
-        }
-
         .success-check {
             color: white;
             font-size: 60px;
             font-weight: bold;
-            animation: checkAppear 0.5s ease-out 0.3s both;
+            animation: checkZoom 0.5s ease-out 0.3s both;
         }
 
-        @keyframes checkAppear {
+        @keyframes checkZoom {
             from {
-                transform: scale(0);
+                transform: scale(0) rotate(-360deg);
             }
             to {
-                transform: scale(1);
+                transform: scale(1) rotate(0);
             }
         }
 
+        /* Финальная информация */
         .final-info {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 30px;
+            animation: infoAppear 0.6s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-info::before {
+            content: '✨';
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.1;
+            right: -20px;
+            top: -20px;
+            animation: infoDecor 3s ease-in-out infinite;
+        }
+
+        @keyframes infoDecor {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(20deg);
+            }
+        }
+
+        @keyframes infoAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .info-item {
@@ -663,15 +843,18 @@
         .final-btn {
             opacity: 1;
             pointer-events: auto;
-            animation: btnPulse 2s ease-in-out infinite;
+            animation: btnReady 0.6s ease;
         }
 
-        @keyframes btnPulse {
-            0%, 100% {
-                transform: scale(1);
+        @keyframes btnReady {
+            0% {
+                transform: scale(0.9);
             }
             50% {
-                transform: scale(1.02);
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
             }
         }
 
@@ -700,6 +883,16 @@
 
         .final-btn {
             background: linear-gradient(135deg, #4ade80, #22c55e);
+            animation: finalBtnGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes finalBtnGlow {
+            0%, 100% {
+                box-shadow: 0 5px 20px rgba(34, 197, 94, 0.3);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(34, 197, 94, 0.5);
+            }
         }
 
         /* Каталог */
@@ -708,6 +901,7 @@
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 30px;
+            padding-bottom: 120px;
             max-width: 900px;
             width: 95%;
             margin: 0 auto;
@@ -923,74 +1117,82 @@
             font-weight: 600;
         }
 
-        /* Сортировка */
-        .sort-section {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        /* Супер красивая сортировка */
+        .sort-container {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
-        }
-
-        .sort-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.05), transparent);
-            animation: sortShine 3s linear infinite;
-        }
-
-        @keyframes sortShine {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .sort-container {
             display: flex;
             align-items: center;
-            gap: 15px;
             justify-content: center;
+            gap: 20px;
+        }
+
+        .sort-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: sortWave 3s linear infinite;
+        }
+
+        @keyframes sortWave {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
         }
 
         .sort-label {
             font-weight: 600;
-            color: #666;
-            font-size: 14px;
+            color: #333;
+            font-size: 16px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+        }
+
+        .sort-label::before {
+            content: '✨';
+            font-size: 20px;
         }
 
         .sort-select {
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            background: white;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 12px 20px;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .sort-select:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
         .sort-select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+            transform: scale(1.05);
         }
 
-        .sort-select:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .sort-select option {
+            background: #667eea;
+            color: white;
         }
 
         .products-grid {
@@ -1021,20 +1223,28 @@
             }
         }
 
-        .product-card::before {
-            content: '🔥';
+        .new-badge {
             position: absolute;
             top: 10px;
-            right: 10px;
-            font-size: 20px;
+            right: 10px;  /* Изменено с left на right */
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
             z-index: 10;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
+            animation: newBadgeShine 2s ease-in-out infinite;
+            box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);  /* Добавлена тень для лучшей видимости */
+    }
 
-        .product-card:hover::before {
-            opacity: 1;
-            transform: scale(1.2);
+        @keyframes newBadgeShine {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
         }
 
         .product-card:hover {
@@ -1160,6 +1370,7 @@
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 30px;
+            padding-bottom: 120px;
             max-width: 500px;
             width: 95%;
             margin: 0 auto;
@@ -1406,6 +1617,7 @@
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 30px;
+            padding-bottom: 120px;
             max-width: 500px;
             width: 95%;
             margin: 0 auto;
@@ -1838,22 +2050,11 @@
             .categories-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
-            .top-nav {
-                right: 10px;
-                top: 10px;
-            }
         }
 
         @media (max-width: 480px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
-            }
-            .nav-label {
-                display: none;
-            }
-            .nav-btn {
-                width: 45px;
-                height: 45px;
             }
         }
     </style>
@@ -1866,20 +2067,20 @@
         <div class="bg-bubble"></div>
     </div>
 
-    <!-- Верхняя навигация -->
-    <div class="top-nav" id="topNav" style="display: none;">
-        <button class="nav-btn active" data-page="catalog">
+    <!-- Плавающая навигация -->
+    <div class="floating-nav" id="floatingNav" style="display: none;">
+        <button class="nav-item active" data-page="catalog">
             <span class="nav-icon">🛍️</span>
-            <span class="nav-label">Каталог</span>
+            <span class="nav-text">Каталог</span>
         </button>
-        <button class="nav-btn" data-page="cart">
+        <button class="nav-item" data-page="cart">
             <span class="nav-icon">🛒</span>
-            <span class="nav-label">Корзина</span>
+            <span class="nav-text">Корзина</span>
             <span class="nav-badge" id="cartBadge" style="display: none;">0</span>
         </button>
-        <button class="nav-btn" data-page="profile">
+        <button class="nav-item" data-page="profile">
             <span class="nav-icon">👤</span>
-            <span class="nav-label">Профиль</span>
+            <span class="nav-text">Профиль</span>
             <span class="nav-badge" id="favoritesBadge" style="display: none;">0</span>
         </button>
     </div>
@@ -1887,7 +2088,7 @@
     <!-- Страница 1: Выбор темы -->
     <div class="container page active" id="page1">
         <div class="logo-container">
-            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD9IjIwIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXIpIi8+CjxwYXRoIGQ9Ik03NSA0MEM1Ni44IDQwIDQyIDU0LjggNDIgNzNDNDIgOTEuMiA1Ni44IDEwNiA3NSAxMDZDOTMuMiAxMDYgMTA4IDkxLjIgMTA4IDczQzEwOCA1NC44IDkzLjIgNDAgNzUgNDBaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNNjAgNzBIOTBMNzUgOTVMNjAgNzBaIiBmaWxsPSJ1cmwoI3BhaW50MV9saW5lYXIpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSIwIiB5MT0iMCIgeDI9IjE1MCIgeTI9IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjAiIHkxPSIwIiB4Mj0iMTUwIiB5Mj9IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
             <div class="sparkles">
                 <span></span>
                 <span></span>
@@ -1919,7 +2120,7 @@
     <!-- Страница 2: Выбор города -->
     <div class="container page" id="page2">
         <div class="logo-container">
-            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjAiIHkxPSIwIiB4Mj0iMTUwIiB5Mj0IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjAiIHkxPSIwIiB4Mj0iMTUwIiB5Mj9IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
         </div>
 
         <h1 class="title">Выберите город</h1>
@@ -1928,16 +2129,16 @@
             <div class="city-card" data-city="moscow1">
                 <div class="city-icon">🏙️</div>
                 <div>
-                    <h3>Москва</h3>
-                    <p>Столица России</p>
+                    <h3>Минск</h3>
+                    <p>Столица Беларуси</p>
                 </div>
             </div>
 
             <div class="city-card" data-city="moscow2">
                 <div class="city-icon">🌆</div>
                 <div>
-                    <h3>Москва 2</h3>
-                    <p>Альтернативный сервер</p>
+                    <h3>Молодечно</h3>
+                    <p>Город Беларуси</p>
                 </div>
             </div>
         </div>
@@ -2017,20 +2218,18 @@
             </div>
         </div>
 
-        <div class="sort-section">
-            <div class="sort-container">
-                <span class="sort-label">📊 Сортировка:</span>
-                <select class="sort-select" id="sortSelect">
-                    <option value="default">По умолчанию</option>
-                    <option value="expensive">Сначала дороже</option>
-                    <option value="cheap">Сначала дешевле</option>
-                </select>
-            </div>
+        <div class="sort-container">
+            <span class="sort-label">Сортировка</span>
+            <select class="sort-select" id="sortSelect">
+                <option value="default">✨ По умолчанию</option>
+                <option value="expensive">💎 Сначала дороже</option>
+                <option value="cheap">💰 Сначала дешевле</option>
+            </select>
         </div>
 
         <div class="products-section">
             <h2 class="section-title">
-                <span id="currentCategoryName">Все товары</span>
+                <span>Категория:</span>
                 <span class="category-badge" id="categoryBadge">Все</span>
             </h2>
             <div class="products-grid" id="productsGrid">
@@ -2202,12 +2401,13 @@
             liquids: [
                 {
                     id: 1,
-                    name: "Fruit Mix Premium",
+                    name: "Podonki Анархия",
                     price: 450,
-                    image: "https://via.placeholder.com/300x300/667eea/ffffff?text=Fruit+Mix",
+                    image: "https://i.ibb.co/n8NGq9vL/Obzor-zhidkostej-PODONKI-ANARHIYa-04-980x551.jpg",
                     category: "Жидкости",
                     categoryId: "liquids",
-                    description: "Премиальная жидкость с фруктовым миксом. Крепость: 3мг, Объем: 30мл"
+                    description: "Премиальная жидкость с фруктовым миксом. Крепость: 3мг, Объем: 30мл",
+                    isNew: true
                 },
                 {
                     id: 2,
@@ -2236,7 +2436,8 @@
                     image: "https://via.placeholder.com/300x300/8b5cf6/ffffff?text=VaporMax",
                     category: "Парогенераторы",
                     categoryId: "vapes",
-                    description: "Профессиональный парогенератор 200W"
+                    description: "Профессиональный парогенератор 200W",
+                    isNew: true
                 },
                 {
                     id: 5,
@@ -2287,7 +2488,8 @@
                     image: "https://via.placeholder.com/300x300/dc2626/ffffff?text=NicBoost",
                     category: "Никобустеры",
                     categoryId: "boosters",
-                    description: "Никотиновый бустер 20мг/мл"
+                    description: "Никотиновый бустер 20мг/мл",
+                    isNew: true
                 }
             ]
         };
@@ -2295,9 +2497,10 @@
         let currentCategory = 'all';
         let allProducts = [];
         let currentProduct = null;
+        let currentProductsList = [];
 
         const categoryNames = {
-            'all': 'Все товары',
+            'all': 'Все',
             'liquids': 'Жидкости',
             'vapes': 'Парогенераторы',
             'disposable': 'Одноразовые',
@@ -2361,25 +2564,25 @@
             document.getElementById('page2').classList.remove('active');
             document.getElementById('page3').classList.add('active');
             document.getElementById('selectedTheme').textContent = appData.theme === 'dark' ? 'Тёмная' : 'Светлая';
-            document.getElementById('selectedCity').textContent = appData.city === 'moscow1' ? 'Москва' : 'Москва 2';
+            document.getElementById('selectedCity').textContent = appData.city === 'moscow1' ? 'Минск' : 'Молодечно';
         });
 
         // Страница 3 - Финал
         document.getElementById('finalBtn').addEventListener('click', function() {
             document.getElementById('page3').classList.remove('active');
             document.getElementById('page4').classList.add('active');
-            document.getElementById('topNav').style.display = 'flex';
+            document.getElementById('floatingNav').style.display = 'flex';
             initializeCatalog();
             initializeProfile();
         });
 
-        // Верхняя навигация
-        document.querySelectorAll('.nav-btn').forEach(btn => {
+        // Плавающая навигация
+        document.querySelectorAll('.nav-item').forEach(btn => {
             btn.addEventListener('click', function() {
                 const page = this.dataset.page;
                 
                 // Убираем активный класс со всех
-                document.querySelectorAll('.nav-btn').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
                 
                 // Скрываем все страницы
@@ -2424,6 +2627,7 @@
         // Каталог
         function initializeCatalog() {
             allProducts = Object.values(products).flat();
+            currentProductsList = allProducts;
             displayProducts(allProducts);
             
             // Категории
@@ -2434,15 +2638,17 @@
                     currentCategory = this.dataset.category;
                     
                     // Обновляем заголовок
-                    document.getElementById('currentCategoryName').textContent = categoryNames[currentCategory];
-                    document.getElementById('categoryBadge').textContent = 
-                        currentCategory === 'all' ? 'Все' : categoryNames[currentCategory];
+                    document.getElementById('categoryBadge').textContent = categoryNames[currentCategory];
                     
                     if (currentCategory === 'all') {
-                        displayProducts(allProducts);
+                        currentProductsList = allProducts;
                     } else {
-                        displayProducts(products[currentCategory] || []);
+                        currentProductsList = products[currentCategory] || [];
                     }
+                    
+                    // Сбрасываем сортировку
+                    document.getElementById('sortSelect').value = 'default';
+                    displayProducts(currentProductsList);
                 });
             });
 
@@ -2451,23 +2657,22 @@
                 const query = this.value.toLowerCase();
                 const filtered = query ? allProducts.filter(p => 
                     p.name.toLowerCase().includes(query) || 
-                    p.category.toLowerCase().includes(query)) : 
-                    (currentCategory === 'all' ? allProducts : products[currentCategory]);
+                    p.category.toLowerCase().includes(query)) : currentProductsList;
                 displayProducts(filtered);
             });
 
             // Сортировка
             document.getElementById('sortSelect').addEventListener('change', function() {
                 const sortType = this.value;
-                let currentProducts = currentCategory === 'all' ? [...allProducts] : [...(products[currentCategory] || [])];
+                let sorted = [...currentProductsList];
                 
                 if (sortType === 'cheap') {
-                    currentProducts.sort((a, b) => a.price - b.price);
+                    sorted.sort((a, b) => a.price - b.price);
                 } else if (sortType === 'expensive') {
-                    currentProducts.sort((a, b) => b.price - a.price);
+                    sorted.sort((a, b) => b.price - a.price);
                 }
                 
-                displayProducts(currentProducts);
+                displayProducts(sorted);
             });
         }
 
@@ -2481,6 +2686,7 @@
                 card.className = 'product-card';
                 card.style.animationDelay = `${index * 0.1}s`;
                 card.innerHTML = `
+                    ${product.isNew ? '<div class="new-badge">✨ NEW</div>' : ''}
                     <img src="${product.image}" alt="${product.name}" class="product-image">
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
@@ -2490,7 +2696,7 @@
                             <button class="product-details-btn" onclick="openProductModal(${product.id})">
                                 Подробнее
                             </button>
-                            <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${product.id})">
+                            <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${product.id}, event)">
                                 ${isFavorite ? '❤️' : '🤍'}
                             </button>
                         </div>
@@ -2500,8 +2706,10 @@
             });
         }
 
-        // Избранное
-        function toggleFavorite(productId) {
+        // Избранное - исправлено
+        function toggleFavorite(productId, event) {
+            event.stopPropagation();
+            
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
             
@@ -2517,11 +2725,12 @@
             
             updateFavoritesBadge();
             
-            // Обновляем отображение
-            if (currentCategory === 'all') {
-                displayProducts(allProducts);
-            } else {
-                displayProducts(products[currentCategory] || []);
+            // Обновляем только кнопку, а не всю страницу
+            const btn = event.target.closest('.favorite-btn');
+            if (btn) {
+                const isFavorite = appData.favorites.some(fav => fav.id === productId);
+                btn.classList.toggle('active', isFavorite);
+                btn.innerHTML = isFavorite ? '❤️' : '🤍';
             }
         }
 
@@ -2569,6 +2778,13 @@
             renderFavorites();
             updateFavoritesBadge();
             updateProfileStats();
+            
+            // Обновляем кнопки в каталоге
+            const favoriteBtn = document.querySelector(`.favorite-btn[onclick*="${productId}"]`);
+            if (favoriteBtn) {
+                favoriteBtn.classList.remove('active');
+                favoriteBtn.innerHTML = '🤍';
+            }
         }
 
         function openProductModal(productId) {
