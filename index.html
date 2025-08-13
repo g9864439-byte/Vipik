@@ -21,7 +21,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 20px 0;
+            padding: 80px 0 20px 0;
             position: relative;
             transition: background 0.5s ease;
         }
@@ -32,7 +32,8 @@
         }
 
         body.dark-theme .container,
-        body.dark-theme .catalog-container {
+        body.dark-theme .catalog-container,
+        body.dark-theme .top-nav {
             background: rgba(30, 30, 30, 0.95);
             color: white;
         }
@@ -45,15 +46,17 @@
         body.dark-theme .city-card,
         body.dark-theme .category-card,
         body.dark-theme .product-card,
-        body.dark-theme .filters-section {
+        body.dark-theme .sort-section,
+        body.dark-theme .cart-item,
+        body.dark-theme .profile-card,
+        body.dark-theme .favorites-item {
             background: rgba(40, 40, 40, 0.9);
             border-color: #444;
             color: white;
         }
 
         body.dark-theme .search-input,
-        body.dark-theme .filter-select,
-        body.dark-theme .price-input {
+        body.dark-theme .sort-select {
             background: rgba(50, 50, 50, 0.9);
             border-color: #555;
             color: white;
@@ -140,6 +143,109 @@
             }
             75% {
                 transform: translateY(-100px) rotate(270deg) scale(0.9);
+            }
+        }
+
+        /* Верхняя навигация */
+        .top-nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 8px;
+            display: flex;
+            gap: 5px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            animation: navSlideDown 0.5s ease-out;
+        }
+
+        @keyframes navSlideDown {
+            from {
+                top: -100px;
+                opacity: 0;
+            }
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        .nav-btn {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-btn.active .nav-icon {
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-btn:hover .nav-icon {
+            transform: scale(1.2);
+        }
+
+        .nav-label {
+            font-size: 9px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .nav-btn.active .nav-label {
+            color: white;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+            animation: badgePop 0.3s ease-out;
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
             }
         }
 
@@ -707,6 +813,9 @@
             font-weight: 600;
             position: relative;
             padding-left: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .section-title::before {
@@ -719,6 +828,25 @@
             height: 20px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 2px;
+        }
+
+        .category-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            animation: badgeShine 2s ease-in-out infinite;
+        }
+
+        @keyframes badgeShine {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
         }
 
         .categories-grid {
@@ -795,18 +923,18 @@
             font-weight: 600;
         }
 
-        /* Улучшенные фильтры */
-        .filters-section {
+        /* Сортировка */
+        .sort-section {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             margin-bottom: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
             position: relative;
             overflow: hidden;
         }
 
-        .filters-section::before {
+        .sort-section::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -814,10 +942,10 @@
             width: 200%;
             height: 200%;
             background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.05), transparent);
-            animation: filterShine 3s linear infinite;
+            animation: sortShine 3s linear infinite;
         }
 
-        @keyframes filterShine {
+        @keyframes sortShine {
             0% {
                 transform: rotate(0deg);
             }
@@ -826,82 +954,43 @@
             }
         }
 
-        .filters-container {
+        .sort-container {
             display: flex;
+            align-items: center;
             gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
+            justify-content: center;
         }
 
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .filter-label {
-            font-weight: 500;
+        .sort-label {
+            font-weight: 600;
             color: #666;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .filter-select,
-        .price-input {
+        .sort-select {
             padding: 10px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .filter-select:focus,
-        .price-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
-        }
-
-        .price-input {
-            width: 100px;
-        }
-
-        .apply-filter-btn {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
             border-radius: 12px;
-            font-weight: 600;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
-        .apply-filter-btn::after {
-            content: '✨';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            opacity: 0;
-            transition: all 0.3s ease;
+        .sort-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
         }
 
-        .apply-filter-btn:hover::after {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.5);
-        }
-
-        .apply-filter-btn:hover {
+        .sort-select:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .products-grid {
@@ -989,15 +1078,20 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         .product-details-btn {
-            width: 100%;
+            flex: 1;
             padding: 10px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             border-radius: 10px;
             font-weight: 600;
-            margin-top: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -1022,8 +1116,517 @@
             height: 200px;
         }
 
+        .favorite-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
+            border-color: #ff6b6b;
+            background: #fff5f5;
+        }
+
+        .favorite-btn.active {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            border-color: transparent;
+            animation: favoritePulse 0.5s ease;
+        }
+
+        @keyframes favoritePulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3) rotate(20deg);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Личный кабинет */
+        .profile-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 500px;
+            width: 95%;
+            margin: 0 auto;
+            display: none;
+            position: relative;
+            z-index: 1;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .profile-container.active {
+            display: block;
+            animation: pageSlideIn 0.6s ease-out;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: avatarFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .avatar-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 30px;
+            height: 30px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-id {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .stat-card:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Избранное в профиле */
+        .favorites-section {
+            margin-top: 30px;
+        }
+
+        .favorites-empty {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        .favorites-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .favorites-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            animation: favoriteItemSlide 0.5s ease-out;
+        }
+
+        @keyframes favoriteItemSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .favorites-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorites-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .favorites-item-info {
+            flex: 1;
+        }
+
+        .favorites-item-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .favorites-item-price {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .favorites-item-remove {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .favorites-item-remove:hover {
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* Корзина */
+        .cart-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 500px;
+            width: 95%;
+            margin: 0 auto;
+            display: none;
+            position: relative;
+            z-index: 1;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .cart-container.active {
+            display: block;
+            animation: pageSlideIn 0.6s ease-out;
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+        }
+
+        .cart-empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            animation: cartItemSlide 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes cartItemSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cart-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.05), transparent);
+            transition: left 0.5s;
+        }
+
+        .cart-item:hover::before {
+            left: 100%;
+        }
+
+        .cart-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .quantity-value {
+            font-weight: 600;
+            font-size: 16px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .cart-item-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item-remove:hover {
+            transform: rotate(90deg) scale(1.2);
+        }
+
+        .cart-summary {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: not-allowed;
+            opacity: 0.6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkout-btn::after {
+            content: '🔒 Скоро';
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
         /* Модальное окно */
-        .product-modal {
+        .product-modal,
+        .confirm-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -1044,6 +1647,12 @@
             margin: 5vh auto;
             overflow-y: auto;
             animation: modalSlideIn 0.5s ease;
+        }
+
+        .confirm-modal .modal-content {
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
         }
 
         @keyframes modalSlideIn {
@@ -1162,6 +1771,66 @@
             height: 300px;
         }
 
+        .confirm-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .confirm-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .confirm-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .confirm-product-name {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .confirm-btn-yes,
+        .confirm-btn-no {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn-yes {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+        }
+
+        .confirm-btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .confirm-btn-no {
+            background: #f3f4f6;
+            color: #666;
+        }
+
+        .confirm-btn-no:hover {
+            background: #e5e7eb;
+        }
+
         @media (max-width: 768px) {
             .modal-body {
                 grid-template-columns: 1fr;
@@ -1169,14 +1838,22 @@
             .categories-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
-            .filter-group {
-                width: 100%;
+            .top-nav {
+                right: 10px;
+                top: 10px;
             }
         }
 
         @media (max-width: 480px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-label {
+                display: none;
+            }
+            .nav-btn {
+                width: 45px;
+                height: 45px;
             }
         }
     </style>
@@ -1189,10 +1866,28 @@
         <div class="bg-bubble"></div>
     </div>
 
+    <!-- Верхняя навигация -->
+    <div class="top-nav" id="topNav" style="display: none;">
+        <button class="nav-btn active" data-page="catalog">
+            <span class="nav-icon">🛍️</span>
+            <span class="nav-label">Каталог</span>
+        </button>
+        <button class="nav-btn" data-page="cart">
+            <span class="nav-icon">🛒</span>
+            <span class="nav-label">Корзина</span>
+            <span class="nav-badge" id="cartBadge" style="display: none;">0</span>
+        </button>
+        <button class="nav-btn" data-page="profile">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Профиль</span>
+            <span class="nav-badge" id="favoritesBadge" style="display: none;">0</span>
+        </button>
+    </div>
+
     <!-- Страница 1: Выбор темы -->
     <div class="container page active" id="page1">
         <div class="logo-container">
-            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSIwIiB5MT0iMCIgeDI9IjE1MCIgeTI9IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD9IjIwIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXIpIi8+CjxwYXRoIGQ9Ik03NSA0MEM1Ni44IDQwIDQyIDU0LjggNDIgNzNDNDIgOTEuMiA1Ni44IDEwNiA3NSAxMDZDOTMuMiAxMDYgMTA4IDkxLjIgMTA4IDczQzEwOCA1NC44IDkzLjIgNDAgNzUgNDBaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNNjAgNzBIOTBMNzUgOTVMNjAgNzBaIiBmaWxsPSJ1cmwoI3BhaW50MV9saW5lYXIpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSIwIiB5MT0iMCIgeDI9IjE1MCIgeTI9IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
             <div class="sparkles">
                 <span></span>
                 <span></span>
@@ -1224,7 +1919,7 @@
     <!-- Страница 2: Выбор города -->
     <div class="container page" id="page2">
         <div class="logo-container">
-            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjAiIHkxPSIwIiB4Mj0iMTUwIiB5Mj0iMTUwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2NjdFRUEiIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiByeD0iMjAiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTc1IDQwQzU2LjggNDAgNDIgNTQuOCA0MiA3M0M0MiA5MS4yIDU2LjggMTA2IDc1IDEwNkM5My4yIDEwNiAxMDggOTEuMiAxMDggNzNDMTA4IDU0LjggOTMuMiA0MCA3NSA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik02MCA3MEg5MEw3NSA5NUw2MCA3MFoiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjAiIHkxPSIwIiB4Mj0iMTUwIiB5Mj0IjE1MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZUVBIIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NEJBMiIgLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyIiB4MT0iNjAiIHkxPSI3MCIgeDI9IjkwIiB5Mj0iOTUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIgLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0QkEyIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg=='">
         </div>
 
         <h1 class="title">Выберите город</h1>
@@ -1322,39 +2017,115 @@
             </div>
         </div>
 
-        <div class="filters-section">
-            <h2 class="section-title">Фильтры</h2>
-            <div class="filters-container">
-                <div class="filter-group">
-                    <label class="filter-label">Сортировка:</label>
-                    <select class="filter-select" id="sortFilter">
-                        <option value="default">По умолчанию</option>
-                        <option value="cheap">Сначала дешёвые</option>
-                        <option value="expensive">Сначала дорогие</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Цена:</label>
-                    <input type="number" class="price-input" id="priceMin" placeholder="От" value="0">
-                    <span>—</span>
-                    <input type="number" class="price-input" id="priceMax" placeholder="До" value="10000">
-                </div>
-                
-                <button class="apply-filter-btn" id="applyFilter">
-                    Применить
-                </button>
+        <div class="sort-section">
+            <div class="sort-container">
+                <span class="sort-label">📊 Сортировка:</span>
+                <select class="sort-select" id="sortSelect">
+                    <option value="default">По умолчанию</option>
+                    <option value="expensive">Сначала дороже</option>
+                    <option value="cheap">Сначала дешевле</option>
+                </select>
             </div>
         </div>
 
         <div class="products-section">
-            <h2 class="section-title">Товары</h2>
+            <h2 class="section-title">
+                <span id="currentCategoryName">Все товары</span>
+                <span class="category-badge" id="categoryBadge">Все</span>
+            </h2>
             <div class="products-grid" id="productsGrid">
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Страница 5: Личный кабинет -->
+    <div class="profile-container page" id="profilePage">
+        <div class="profile-header">
+            <div class="avatar-container">
+                <div class="avatar" id="userAvatar">👤</div>
+                <div class="avatar-badge">✓</div>
+            </div>
+            
+            <div class="profile-info">
+                <h2 class="profile-name" id="userName">Пользователь</h2>
+                <div class="profile-id">
+                    <span>🆔 ID:</span>
+                    <strong id="userId">1</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="stat-icon">🛒</div>
+                <div class="stat-value" id="cartCount">0</div>
+                <div class="stat-label">В корзине</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="totalSum">0 ₽</div>
+                <div class="stat-label">Сумма</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-value" id="favoritesCount">0</div>
+                <div class="stat-label">Избранное</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎁</div>
+                <div class="stat-value">0%</div>
+                <div class="stat-label">Скидка</div>
+            </div>
+        </div>
+
+        <div class="favorites-section">
+            <h2 class="section-title">Избранные товары</h2>
+            <div class="favorites-empty" id="favoritesEmpty">
+                <p>Нет избранных товаров</p>
+            </div>
+            <div class="favorites-list" id="favoritesList" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Страница 6: Корзина -->
+    <div class="cart-container page" id="cartPage">
+        <div class="cart-header">
+            <h1 class="title">Корзина</h1>
+        </div>
+
+        <div class="cart-content">
+            <div class="cart-empty" id="cartEmpty">
+                <div class="cart-empty-icon">🛒</div>
+                <h3>Корзина пуста</h3>
+                <p>Добавьте товары из каталога</p>
+            </div>
+
+            <div class="cart-items" id="cartItems" style="display: none;">
+            </div>
+
+            <div class="cart-summary" id="cartSummary" style="display: none;">
+                <div class="summary-row">
+                    <span class="summary-label">Товаров:</span>
+                    <span class="summary-value" id="summaryCount">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Скидка:</span>
+                    <span class="summary-value">0%</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Итого:</span>
+                    <span class="summary-value" id="summaryTotal">0 ₽</span>
+                </div>
+            </div>
+
+            <button class="checkout-btn" id="checkoutBtn" style="display: none;">
+                Перейти к оплате
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно товара -->
     <div class="product-modal" id="productModal">
         <div class="modal-content">
             <span class="modal-close" id="modalClose">&times;</span>
@@ -1392,6 +2163,23 @@
         </div>
     </div>
 
+    <!-- Модальное окно подтверждения -->
+    <div class="confirm-modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="confirm-icon">🛒</div>
+            <h3 class="confirm-title">Подтверждение</h3>
+            <p class="confirm-message">
+                Вы действительно хотите добавить 
+                <span class="confirm-product-name" id="confirmProductName"></span>
+                в корзину?
+            </p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn-yes" id="confirmYes">Да, добавить</button>
+                <button class="confirm-btn-no" id="confirmNo">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ВСЁ JAVASCRIPT ЗДЕСЬ
         const tg = window.Telegram ? window.Telegram.WebApp : null;
@@ -1402,7 +2190,11 @@
 
         const appData = {
             theme: null,
-            city: null
+            city: null,
+            userId: Math.floor(Math.random() * 1000) + 1,
+            userName: tg ? (tg.initDataUnsafe?.user?.first_name || 'Пользователь') : 'Пользователь',
+            cart: [],
+            favorites: []
         };
 
         // База товаров
@@ -1502,6 +2294,16 @@
 
         let currentCategory = 'all';
         let allProducts = [];
+        let currentProduct = null;
+
+        const categoryNames = {
+            'all': 'Все товары',
+            'liquids': 'Жидкости',
+            'vapes': 'Парогенераторы',
+            'disposable': 'Одноразовые',
+            'tobacco': 'Табачные изделия',
+            'boosters': 'Никобустеры'
+        };
 
         // Создаем плавающие частицы
         function createParticles() {
@@ -1566,13 +2368,63 @@
         document.getElementById('finalBtn').addEventListener('click', function() {
             document.getElementById('page3').classList.remove('active');
             document.getElementById('page4').classList.add('active');
+            document.getElementById('topNav').style.display = 'flex';
             initializeCatalog();
+            initializeProfile();
         });
+
+        // Верхняя навигация
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const page = this.dataset.page;
+                
+                // Убираем активный класс со всех
+                document.querySelectorAll('.nav-btn').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Скрываем все страницы
+                document.getElementById('page4').classList.remove('active');
+                document.getElementById('profilePage').classList.remove('active');
+                document.getElementById('cartPage').classList.remove('active');
+                
+                // Показываем нужную
+                if (page === 'catalog') {
+                    document.getElementById('page4').classList.add('active');
+                } else if (page === 'profile') {
+                    document.getElementById('profilePage').classList.add('active');
+                    updateProfileStats();
+                    renderFavorites();
+                } else if (page === 'cart') {
+                    document.getElementById('cartPage').classList.add('active');
+                    renderCart();
+                }
+            });
+        });
+
+        // Инициализация профиля
+        function initializeProfile() {
+            document.getElementById('userId').textContent = appData.userId;
+            document.getElementById('userName').textContent = appData.userName;
+            
+            // Первая буква имени в аватаре
+            const firstLetter = appData.userName.charAt(0).toUpperCase();
+            document.getElementById('userAvatar').textContent = firstLetter;
+        }
+
+        // Обновление статистики профиля
+        function updateProfileStats() {
+            const totalItems = appData.cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalSum = appData.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            document.getElementById('cartCount').textContent = totalItems;
+            document.getElementById('totalSum').textContent = totalSum + ' ₽';
+            document.getElementById('favoritesCount').textContent = appData.favorites.length;
+        }
 
         // Каталог
         function initializeCatalog() {
             allProducts = Object.values(products).flat();
-            displayProducts(allProducts); // Показываем все товары по умолчанию
+            displayProducts(allProducts);
             
             // Категории
             document.querySelectorAll('.category-card').forEach(card => {
@@ -1580,6 +2432,11 @@
                     document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
                     this.classList.add('active');
                     currentCategory = this.dataset.category;
+                    
+                    // Обновляем заголовок
+                    document.getElementById('currentCategoryName').textContent = categoryNames[currentCategory];
+                    document.getElementById('categoryBadge').textContent = 
+                        currentCategory === 'all' ? 'Все' : categoryNames[currentCategory];
                     
                     if (currentCategory === 'all') {
                         displayProducts(allProducts);
@@ -1599,22 +2456,18 @@
                 displayProducts(filtered);
             });
 
-            // Фильтры
-            document.getElementById('applyFilter').addEventListener('click', function() {
-                const sortType = document.getElementById('sortFilter').value;
-                const minPrice = parseInt(document.getElementById('priceMin').value) || 0;
-                const maxPrice = parseInt(document.getElementById('priceMax').value) || 999999;
-                
-                let filtered = (currentCategory === 'all' ? allProducts : products[currentCategory] || [])
-                    .filter(p => p.price >= minPrice && p.price <= maxPrice);
+            // Сортировка
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                const sortType = this.value;
+                let currentProducts = currentCategory === 'all' ? [...allProducts] : [...(products[currentCategory] || [])];
                 
                 if (sortType === 'cheap') {
-                    filtered.sort((a, b) => a.price - b.price);
+                    currentProducts.sort((a, b) => a.price - b.price);
                 } else if (sortType === 'expensive') {
-                    filtered.sort((a, b) => b.price - a.price);
+                    currentProducts.sort((a, b) => b.price - a.price);
                 }
                 
-                displayProducts(filtered);
+                displayProducts(currentProducts);
             });
         }
 
@@ -1623,6 +2476,7 @@
             grid.innerHTML = '';
             
             productsList.forEach((product, index) => {
+                const isFavorite = appData.favorites.some(fav => fav.id === product.id);
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.style.animationDelay = `${index * 0.1}s`;
@@ -1632,18 +2486,96 @@
                         <h3 class="product-name">${product.name}</h3>
                         <p class="product-category">${product.category}</p>
                         <div class="product-price">${product.price} ₽</div>
-                        <button class="product-details-btn" onclick="openProductModal(${product.id})">
-                            Подробнее
-                        </button>
+                        <div class="product-actions">
+                            <button class="product-details-btn" onclick="openProductModal(${product.id})">
+                                Подробнее
+                            </button>
+                            <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${product.id})">
+                                ${isFavorite ? '❤️' : '🤍'}
+                            </button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
+        // Избранное
+        function toggleFavorite(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            const index = appData.favorites.findIndex(fav => fav.id === productId);
+            
+            if (index > -1) {
+                // Удаляем из избранного
+                appData.favorites.splice(index, 1);
+            } else {
+                // Добавляем в избранное
+                appData.favorites.push(product);
+            }
+            
+            updateFavoritesBadge();
+            
+            // Обновляем отображение
+            if (currentCategory === 'all') {
+                displayProducts(allProducts);
+            } else {
+                displayProducts(products[currentCategory] || []);
+            }
+        }
+
+        function updateFavoritesBadge() {
+            const badge = document.getElementById('favoritesBadge');
+            if (appData.favorites.length > 0) {
+                badge.textContent = appData.favorites.length;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderFavorites() {
+            const favoritesEmpty = document.getElementById('favoritesEmpty');
+            const favoritesList = document.getElementById('favoritesList');
+            
+            if (appData.favorites.length === 0) {
+                favoritesEmpty.style.display = 'block';
+                favoritesList.style.display = 'none';
+            } else {
+                favoritesEmpty.style.display = 'none';
+                favoritesList.style.display = 'block';
+                
+                favoritesList.innerHTML = '';
+                appData.favorites.forEach((item, index) => {
+                    const favItem = document.createElement('div');
+                    favItem.className = 'favorites-item';
+                    favItem.style.animationDelay = `${index * 0.1}s`;
+                    favItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="favorites-item-image">
+                        <div class="favorites-item-info">
+                            <div class="favorites-item-name">${item.name}</div>
+                            <div class="favorites-item-price">${item.price} ₽</div>
+                        </div>
+                        <button class="favorites-item-remove" onclick="removeFromFavorites(${item.id})">×</button>
+                    `;
+                    favoritesList.appendChild(favItem);
+                });
+            }
+        }
+
+        function removeFromFavorites(productId) {
+            appData.favorites = appData.favorites.filter(item => item.id !== productId);
+            renderFavorites();
+            updateFavoritesBadge();
+            updateProfileStats();
+        }
+
         function openProductModal(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
+            
+            currentProduct = product;
             
             document.getElementById('modalImage').src = product.image;
             document.getElementById('modalTitle').textContent = product.name;
@@ -1670,18 +2602,140 @@
             btn.textContent = desc.classList.contains('expanded') ? 'Свернуть ▲' : 'Развернуть ▼';
         }
 
+        // Добавление в корзину с подтверждением
         document.getElementById('buyBtn').addEventListener('click', function() {
+            if (!currentProduct) return;
+            
+            // Показываем модалку подтверждения
+            document.getElementById('confirmProductName').textContent = currentProduct.name;
+            document.getElementById('confirmModal').style.display = 'block';
+        });
+
+        document.getElementById('confirmYes').addEventListener('click', function() {
+            addToCart(currentProduct);
+            document.getElementById('confirmModal').style.display = 'none';
+            document.getElementById('productModal').style.display = 'none';
+            
+            // Показываем уведомление
             if (tg) {
                 tg.showPopup({
-                    title: '✅ Товар добавлен!',
-                    message: 'Товар успешно добавлен в корзину',
+                    title: '✅ Добавлено!',
+                    message: `${currentProduct.name} добавлен в корзину`,
                     buttons: [{type: 'ok'}]
                 });
             } else {
-                alert('✅ Товар добавлен в корзину!');
+                alert(`✅ ${currentProduct.name} добавлен в корзину!`);
             }
-            document.getElementById('productModal').style.display = 'none';
         });
+
+        document.getElementById('confirmNo').addEventListener('click', function() {
+            document.getElementById('confirmModal').style.display = 'none';
+        });
+
+        // Функции корзины
+        function addToCart(product) {
+            const existingItem = appData.cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                appData.cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const totalItems = appData.cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartBadge');
+            
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartEmpty = document.getElementById('cartEmpty');
+            const cartSummary = document.getElementById('cartSummary');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            
+            if (appData.cart.length === 0) {
+                cartEmpty.style.display = 'block';
+                cartItems.style.display = 'none';
+                cartSummary.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                cartEmpty.style.display = 'none';
+                cartItems.style.display = 'block';
+                cartSummary.style.display = 'block';
+                checkoutBtn.style.display = 'block';
+                
+                cartItems.innerHTML = '';
+                let totalSum = 0;
+                let totalCount = 0;
+                
+                appData.cart.forEach((item, index) => {
+                    totalSum += item.price * item.quantity;
+                    totalCount += item.quantity;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.style.animationDelay = `${index * 0.1}s`;
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-info">
+                            <h3 class="cart-item-name">${item.name}</h3>
+                            <div class="cart-item-price">${item.price} ₽</div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">−</button>
+                                <span class="quantity-value">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <button class="cart-item-remove" onclick="removeFromCart(${item.id})">×</button>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+                
+                document.getElementById('summaryCount').textContent = totalCount + ' шт.';
+                document.getElementById('summaryTotal').textContent = totalSum + ' ₽';
+            }
+        }
+
+        function changeQuantity(productId, change) {
+            const item = appData.cart.find(item => item.id === productId);
+            if (!item) return;
+            
+            item.quantity += change;
+            
+            if (item.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                renderCart();
+                updateCartBadge();
+            }
+        }
+
+        function removeFromCart(productId) {
+            appData.cart = appData.cart.filter(item => item.id !== productId);
+            renderCart();
+            updateCartBadge();
+        }
+
+        // Глобальные функции для onclick
+        window.openProductModal = openProductModal;
+        window.toggleDescription = toggleDescription;
+        window.toggleFavorite = toggleFavorite;
+        window.removeFromFavorites = removeFromFavorites;
+        window.changeQuantity = changeQuantity;
+        window.removeFromCart = removeFromCart;
     </script>
 </body>
 </html>
