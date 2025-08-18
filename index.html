@@ -5040,19 +5040,60 @@ ${orderText}
     showCheckoutPage('successPage');
 }
 function sendToBot() {
-    // Проверяем, скопирован ли текст
-    const orderText = document.getElementById('orderTextArea').innerText;
+    // Копируем текст заказа
+    const text = document.getElementById('orderTextArea').innerText;
     
-    // Копируем текст автоматически
-    copyOrderText();
+    // Сохраняем в буфер обмена
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+    }
     
-    // Переходим в чат с ботом
+    // Показываем большое уведомление
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        padding: 20px;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: white; border-radius: 20px; padding: 30px; 
+                    max-width: 350px; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 20px;">📋</div>
+            <h2 style="color: #333; margin-bottom: 15px;">Заказ скопирован!</h2>
+            <p style="color: #666; margin-bottom: 25px; line-height: 1.5;">
+                Сейчас откроется чат с ботом.<br>
+                <strong>Просто вставьте текст и отправьте!</strong>
+            </p>
+            <button onclick="finishOrder()" 
+                    style="width: 100%; padding: 15px; background: #0088cc; 
+                           color: white; border: none; border-radius: 12px; 
+                           font-size: 16px; font-weight: bold; cursor: pointer;">
+                ✅ Понятно, открыть чат
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Функция завершения заказа
+function finishOrder() {
+    // Закрываем Mini App если в Telegram
     if (window.Telegram && window.Telegram.WebApp) {
-        // Если в Telegram - закрываем Mini App
         window.Telegram.WebApp.close();
-    } else {
-        // Если в браузере - открываем Telegram
-        window.open('https://t.me/vapeseehop_bot', '_blank');
+    }
+    // Если в браузере - переходим к боту
+    else {
+        window.location.href = 'https://t.me/vapeseehop_bot';
     }
 }
 
@@ -5557,4 +5598,5 @@ window.showSendOrderPage = showSendOrderPage;
 window.sendOrderToBot = sendOrderToBot;
 window.showOrderCompleted = showOrderCompleted;
 window.sendToBot = sendToBot;
+window.finishOrder = finishOrder;
 </script>
